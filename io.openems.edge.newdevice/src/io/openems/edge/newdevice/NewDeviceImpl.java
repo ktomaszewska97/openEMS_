@@ -1,6 +1,8 @@
 package io.openems.edge.newdevice;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -64,21 +66,24 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 		switch (event.getTopic()) {
 		case EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE:
 			counter++;
-			//Can't do it without a counter. It's a loop, that's being
-			// triggered continuously and that's how EMS work.
-			// You can change it with a Scheduler component.
-			if(counter==10) {
-				counter=0;
+			if (counter == 10) {
+				counter = 0;
 				try {
 					this.sendGet();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
+					if (this.config.logsEnabled()) {
+						try {
+							PrintWriter out = new PrintWriter("errorLogs.txt");
+							e.printStackTrace(out);
+							out.close();
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+					}
 					e.printStackTrace();
-					// Logs into TXT
-					// Trace the errors
-					// Enabling writing to TXT via UI
-					// Separate TXT for errors
-					// If our own solution - save in the same dir. as java file
 				}
 			}
 
@@ -88,15 +93,14 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 
 	@Override
 	public String debugLog() {
-		return "Channel Values_:"+this.getLoadPowerChannel().value() +
-				this.getArrayVoltageChannel().value();
+		return "Channel Values_:" + this.getLoadPowerChannel().value() + this.getArrayVoltageChannel().value();
 	}
-	
+
 	@Override
 	public Config getConfig() {
 		return this.config;
 	}
-	
+
 	private void sendGet() throws IOException {
 		URL obj = new URL(this.config.ssbUrl());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -105,11 +109,10 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 		int responseCode = con.getResponseCode();
 		System.out.println("GET Response Code :: " + responseCode);
 		if (responseCode == HttpURLConnection.HTTP_OK) { // success
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
 			StringBuffer response = new StringBuffer();
-	
+
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
@@ -126,6 +129,5 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 			}
 		}
 	}
-	
 
 }

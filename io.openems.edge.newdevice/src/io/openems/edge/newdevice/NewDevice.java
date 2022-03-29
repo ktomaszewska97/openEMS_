@@ -23,17 +23,12 @@ import io.openems.edge.common.component.OpenemsComponent;
 
 public interface NewDevice extends OpenemsComponent {
 
-public enum ChannelId implements io.openems.edge.common.channel.ChannelId {
-		
-		ARRAY_VOLTAGE(Doc.of(OpenemsType.DOUBLE)
-				.unit(Unit.VOLT)
-				.accessMode(AccessMode.READ_WRITE) 
+	public enum ChannelId implements io.openems.edge.common.channel.ChannelId {
+
+		ARRAY_VOLTAGE(Doc.of(OpenemsType.DOUBLE).unit(Unit.VOLT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		LOAD_POWER(Doc.of(OpenemsType.DOUBLE)
-				.unit(Unit.VOLT)
-				.accessMode(AccessMode.READ_WRITE) 
-				.persistencePriority(PersistencePriority.HIGH)),
-		;
+		LOAD_POWER(Doc.of(OpenemsType.DOUBLE).unit(Unit.VOLT).accessMode(AccessMode.READ_WRITE)
+				.persistencePriority(PersistencePriority.HIGH)),;
 
 		private final Doc doc;
 
@@ -46,11 +41,11 @@ public enum ChannelId implements io.openems.edge.common.channel.ChannelId {
 			return this.doc;
 		}
 	}
-	
+
 	public default DoubleWriteChannel getArrayVoltageChannel() {
 		return this.channel(ChannelId.ARRAY_VOLTAGE);
 	}
-	
+
 	public default void _setArrayVoltage(double value) {
 		this.getArrayVoltageChannel().setNextValue(value);
 	}
@@ -58,12 +53,11 @@ public enum ChannelId implements io.openems.edge.common.channel.ChannelId {
 	public default DoubleWriteChannel getLoadPowerChannel() {
 		return this.channel(ChannelId.LOAD_POWER);
 	}
-	
+
 	public default void _setLoadPower(double value) {
 		this.getLoadPowerChannel().setNextValue(value);
 	}
 
 	public Config getConfig();
-
 
 }
