@@ -75,15 +75,13 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					if (this.config.logsEnabled()) {
+						Logger logger = new Logger();
 						try {
-							PrintWriter out = new PrintWriter("errorLogs.txt");
-							e.printStackTrace(out);
-							out.close();
+							logger.logError(e);
 						} catch (FileNotFoundException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-
 					}
 					e.printStackTrace();
 				}
@@ -136,7 +134,7 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 		URL obj = new URL(this.config.ssbUrl());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
-		//con.setRequestProperty("Content-Type", "application/json");
+		// con.setRequestProperty("Content-Type", "application/json");
 		con.setDoOutput(true);
 
 		int responseCode = con.getResponseCode();
@@ -144,6 +142,7 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 		System.out.println("POST Response Message : " + con.getResponseMessage());
 
 		if (responseCode == HttpURLConnection.HTTP_CREATED) { // success
+			/*
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
 			StringBuffer response = new StringBuffer();
@@ -164,6 +163,7 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 				System.out.println("JsonArray:" + JsonParser.parseString(response.toString()).isJsonArray());
 			}
 			System.out.println(response.toString());
+			*/
 		} else {
 			System.out.println("POST NOT WORKED");
 		}
