@@ -1,0 +1,22 @@
+<ng-container *ngIf="component && service.currentEdge | async as edge">
+  <ng-container *ngIf="(edge.currentData | async)['channel'] as currentData">
+      <ion-card>
+          <ion-item lines="full" color="light">
+              <ion-label style="display: flex; justify-content: center;">Example Component</ion-label>
+          </ion-item>
+          <ion-card-content
+              style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+              <ion-list>
+                  <ion-item>
+                      <ion-label>Load Power: {{ currentData[component.id + '/LoadPower'] | unitvalue:'Wh'}}
+                      </ion-label>
+                  </ion-item>
+                  <ion-item>
+                      <ion-label>Array Voltage: {{ currentData[component.id + '/ArrayVoltage'] | unitvalue:'V'}}
+                      </ion-label>
+                  </ion-item>
+              </ion-list>
+          </ion-card-content>
+      </ion-card>
+  </ng-container>
+</ng-container>
