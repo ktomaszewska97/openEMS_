@@ -57,4 +57,11 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 		return null;
 	}
 
+
+	@Override
+	public boolean logsEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
