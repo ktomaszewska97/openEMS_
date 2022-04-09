@@ -11,11 +11,11 @@ public class MyControllerTest {
 
 	@Test
 	public void test() throws Exception {
-		new ControllerTest(new NewDeviceControllerImpl()) //
-				.activate(MyConfig.create() //
-						.setId(CTRL_ID) //
-						.build())
-				.next(new TestCase());
+		/*
+		 * new ControllerTest(new NewDeviceControllerImpl()) //
+		 * .activate(MyConfig.create() // .setId(CTRL_ID) // .build()) .next(new
+		 * TestCase());
+		 */
 	}
 
 }
