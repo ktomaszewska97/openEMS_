@@ -1,4 +1,4 @@
-package io.openems.edge.newdevice;
+package io.openems.edge.controller.newdevicecontroller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,7 +9,7 @@ public class Logger {
 	
 	public void logError(IOException e) throws FileNotFoundException {
 		Date date = new Date();
-		PrintWriter out = new PrintWriter("errorLogsDevice.txt");
+		PrintWriter out = new PrintWriter("errorLogsController.txt");
 		out.write(date.toString());
 		out.write("\n");
 		e.printStackTrace(out);

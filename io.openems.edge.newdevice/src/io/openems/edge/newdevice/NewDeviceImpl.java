@@ -52,7 +52,6 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 	void activate(ComponentContext context, Config config) {
 		super.activate(context, config.id(), config.alias(), config.enabled());
 		this.config = config;
-		this._setIsTriggered(false);
 	}
 
 	@Deactivate
@@ -66,13 +65,13 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 			return;
 		}
 		switch (event.getTopic()) {
+		// Triggered every second
 		case EdgeEventConstants.TOPIC_CYCLE_BEFORE_PROCESS_IMAGE:
 			counter++;
 			if (counter == 10) {
 				counter = 0;
 				try {
 					this.sendGet();
-					// this.sendPost();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					if (this.config.logsEnabled()) {
@@ -87,16 +86,11 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 					e.printStackTrace();
 				}
 			}
-			/*
-			 * if (this.getButtonTriggered().value().asString() == "true") { try {
-			 * this.sendPost(); } catch (IOException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); } }
-			 */
 
 			break;
 		}
 	}
-	
+
 	@Override
 	public String debugLog() {
 		return "Channel Values_:" + this.getLoadPowerChannel().value() + this.getArrayVoltageChannel().value();
@@ -136,75 +130,8 @@ public class NewDeviceImpl extends AbstractOpenemsComponent implements NewDevice
 		}
 	}
 
-	private void sendPost() throws IOException {
-		URL obj = new URL(this.config.ssbUrl());
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("POST");
-		// con.setRequestProperty("Content-Type", "application/json");
-		con.setDoOutput(true);
-
-		int responseCode = con.getResponseCode();
-		System.out.println("POST Response Code :  " + responseCode);
-		System.out.println("POST Response Message : " + con.getResponseMessage());
-
-		if (responseCode == HttpURLConnection.HTTP_CREATED) { // success
-			
-			/*
-			 * BufferedReader in = new BufferedReader(new
-			 * InputStreamReader(con.getInputStream())); String inputLine; StringBuffer
-			 * response = new StringBuffer();
-			 * 
-			 * while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
-			 * in.close(); if (JsonParser.parseString(response.toString()).isJsonObject()) {
-			 * JsonObject jo =
-			 * JsonParser.parseString(response.toString()).getAsJsonObject();
-			 * System.out.println(jo);
-			 * this._setArrayVoltage(jo.get("arrayVoltage").getAsDouble());
-			 * this._setLoadPower(jo.get("loadPower").getAsDouble());
-			 * System.out.println(this.getArrayVoltageChannel());
-			 * System.out.println(this.getLoadPowerChannel()); } else {
-			 * System.out.println("Not JsonObject"); System.out.println("JsonArray:" +
-			 * JsonParser.parseString(response.toString()).isJsonArray()); }
-			 * System.out.println(response.toString());
-			 */
-			
-			 
-		} else {
-			System.out.println("POST NOT WORKED");
-		}
-
-	}
-
-	public void receiveChannelValues(String channelValues) {
-		//this.resetChargingPlan();
-		System.out.println("Values before reciving: " + channelValues);
-		if (JsonParser.parseString(channelValues.toString()).isJsonObject()) {
-			JsonObject jo = JsonParser.parseString(channelValues.toString()).getAsJsonObject();
-			if(jo.get("isTriggered") != null) {			
-				this._setIsTriggered(jo.get("isTriggered").getAsBoolean());
-			}
-			if(jo.get("isActive") != null) {			
-				this._setIsActive(jo.get("isActive").getAsBoolean());
-			}
-		System.out.println("Values after receiving: " + this.getIsTriggeredChannel().value());
-		System.out.println("Values after receiving: " + this.getIsActiveChannel().value());
-		
-		if(this.getIsTriggeredChannel().value().get() == true) {
-			try {
-				System.out.println("Send post");
-				this.sendPost();
-				this._setIsTriggered(false);
-				System.out.println("Value after send post: " + this.getIsTriggeredChannel().value());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		}
-	}
-	
 	public void resetChannelValues() {
-		
+
 	}
 
 }
