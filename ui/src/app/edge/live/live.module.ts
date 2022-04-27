@@ -50,8 +50,8 @@ import { Evcs_Api_ClusterModalComponent } from './Multiple/Evcs_Api_Cluster/moda
 import { OfflineComponent } from './offline/offline.component';
 import { ProductionModalComponent } from './production/modal/modal.component';
 import { ProductionComponent } from './production/production.component';
-import { ExampleComponent } from './example/example.component';
 import { NewDevice } from './newdevice/newdevice.component';
+import { SmartSolarBox } from './smartsolarbox/smartsolarbox.component';
 
 @NgModule({
   imports: [
@@ -136,8 +136,8 @@ import { NewDevice } from './newdevice/newdevice.component';
     ProductionModalComponent,
     StorageComponent,
     StorageModalComponent,
-    ExampleComponent,
-    NewDevice
+    NewDevice,
+    SmartSolarBox
   ]
 })
 export class LiveModule { }

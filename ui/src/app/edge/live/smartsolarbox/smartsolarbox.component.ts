@@ -6,12 +6,12 @@ import { SetChannelValueRequest } from 'src/app/shared/jsonrpc/request/setChanne
 
 
 @Component({
-  selector: NewDevice.SELECTOR,
-  templateUrl: './newdevice.component.html'
+  selector: SmartSolarBox.SELECTOR,
+  templateUrl: './smartsolarbox.component.html'
 })
-export class NewDevice {
+export class SmartSolarBox {
 
-  private static readonly SELECTOR = "newdevice";
+  private static readonly SELECTOR = "smartsolarbox";
 
   @Input() private componentId: string;
 
@@ -31,11 +31,20 @@ export class NewDevice {
       this.service.getConfig().then(config => {
           this.component = config.getComponent(this.componentId);
           console.log("Component ID"+this.componentId);
-          edge.subscribeChannels(this.websocket, NewDevice.SELECTOR + this.componentId, [
-            new ChannelAddress(this.componentId, "ArrayVoltage"),
+          edge.subscribeChannels(this.websocket, SmartSolarBox.SELECTOR + this.componentId, [
+            new ChannelAddress(this.componentId, "SolarAmps"),
+            new ChannelAddress(this.componentId, "SolarVolts"),
+            new ChannelAddress(this.componentId, "SolarPower"),
+            new ChannelAddress(this.componentId, "BatteryAmps"),
+            new ChannelAddress(this.componentId, "BatteryVolts"),
+            new ChannelAddress(this.componentId, "BatterySoc"),
+            new ChannelAddress(this.componentId, "LoadAmps"),
+            new ChannelAddress(this.componentId, "LoadVolts"),
             new ChannelAddress(this.componentId, "LoadPower"),
-            new ChannelAddress(this.componentId, "SwitchState"),
-            new ChannelAddress(this.componentId, "IsActive"),
+            new ChannelAddress(this.componentId, "GenTotal"),
+            new ChannelAddress(this.componentId, "ConsumpTotal"),
+            new ChannelAddress(this.componentId, "BoxTemperature"),
+            new ChannelAddress(this.componentId, "SwitchStatus"),
           ]);
       });
   });
@@ -43,7 +52,7 @@ export class NewDevice {
 
   ngOnDestroy() {
     if (this.edge != null) {
-        this.edge.unsubscribeChannels(this.websocket, NewDevice.SELECTOR + this.componentId);
+        this.edge.unsubscribeChannels(this.websocket, SmartSolarBox.SELECTOR + this.componentId);
     }
 }
 
@@ -56,8 +65,7 @@ hitButtonTrue() {
               componentId: this.component.id,
               channelId: 'ButtonValues',
               value: {
-                "isTriggered": 'true'
-                //"isActive": 'true'
+                "switchStatus": 'true'
             }
           })
       ).then(response => {
@@ -69,6 +77,7 @@ hitButtonTrue() {
       console.log();
   }
 }
+
 hitButtonFalse() {
   if (this.edge) {
     console.log("Before sendRequest");
@@ -78,7 +87,7 @@ hitButtonFalse() {
               componentId: this.component.id,
               channelId: 'ButtonValues',
               value: {
-                "isTriggered": 'false'
+                "switchStatus": 'false'
                 //"isActive": 'true'
             }
           })

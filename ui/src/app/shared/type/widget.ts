@@ -35,6 +35,7 @@ export enum WidgetFactory {
     'Evcs.Cluster.SelfConsumption',
     'Controller.NewDeviceController',
     'NewDevice',
+    'Controller.SmartSolarBox'
 }
 
 export type Icon = {

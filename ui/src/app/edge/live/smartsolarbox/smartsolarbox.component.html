@@ -1,0 +1,70 @@
+<ng-container *ngIf="component && service.currentEdge | async as edge">
+    <ng-container *ngIf="(edge.currentData | async)['channel'] as currentData">
+        <ion-card>
+            <ion-item lines="full" color="light">
+                <ion-label style="display: flex; justify-content: center;">SmartSolarBox</ion-label>
+            </ion-item>
+            <ion-card-content
+                style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+                <ion-list>
+                    <ion-item>
+                        <ion-label>Solar Amps: {{ currentData[component.id + '/SolarAmps'] | unitvalue:'A'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Solar Volts: {{ currentData[component.id + '/SolarVolts'] | unitvalue:'V'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Solar Power: {{ currentData[component.id + '/SolarPower'] | unitvalue:'Wh'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Battery Amps: {{ currentData[component.id + '/BatteryAmps'] | unitvalue:'A'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Battery Volts: {{ currentData[component.id + '/BatteryVolts'] | unitvalue:'V'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Battery SoC: {{ currentData[component.id + '/BatterySoc'] | unitvalue:'%'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Load Amps: {{ currentData[component.id + '/LoadAmps'] | unitvalue:'A'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Load Volts: {{ currentData[component.id + '/LoadVolts'] | unitvalue:'V'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Load Power: {{ currentData[component.id + '/LoadPower'] | unitvalue:'Wh'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Gen Total: {{ currentData[component.id + '/GenTotal'] | unitvalue:'kWh'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Total Consumption: {{ currentData[component.id + '/ConsumpTotal'] | unitvalue:'kWh'}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Box Temperature: {{ currentData[component.id + '/BoxTemperature'] | unitvalue:'C'}}
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+
+                <span style="display: flex; justify-content: space-evenly; width: 100%;">
+                    <ion-button color="primary" (click)="hitButtonTrue()">Switch ON</ion-button>
+                </span>
+                <span style="display: flex; justify-content: space-evenly; width: 100%;">
+                    <ion-button color="primary" (click)="hitButtonFalse()">Switch OFF</ion-button>
+                </span>
+
+            </ion-card-content>
+        </ion-card>
+    </ng-container>
+  </ng-container>
