@@ -43,8 +43,21 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 		this.builder = builder;
 	}
 
+
 	@Override
-	public String ssbUrl() {
+	public String apiUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String onUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String offUrl() {
 		// TODO Auto-generated method stub
 		return null;
 	}
