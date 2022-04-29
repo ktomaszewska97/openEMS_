@@ -17,8 +17,14 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 	@AttributeDefinition(name = "Is enabled?", description = "Is this Component enabled?")
 	boolean enabled() default true;
 	
-	@AttributeDefinition(name = "API URL", description = "The URL of the API")
-	String ssbUrl() default "http://0.0.0.0:3000/smartsolarbox";
+	@AttributeDefinition(name = "GET API URL", description = "The GET URL of the API")
+	String apiUrl() default "http://0.0.0.0:3000/smartsolarbox";
+	
+	@AttributeDefinition(name = "TURN ON URL", description = "The ON URL of the API")
+	String onUrl() default "http://0.0.0.0:3000/smartsolarbox/on";
+	
+	@AttributeDefinition(name = "TURN OFF URL", description = "The OFF URL of the API")
+	String offUrl() default "http://0.0.0.0:3000/smartsolarbox/off";
 
 	String webconsole_configurationFactory_nameHint() default "Controller io.openems.edge.smartsolarbox [{id}]";
 

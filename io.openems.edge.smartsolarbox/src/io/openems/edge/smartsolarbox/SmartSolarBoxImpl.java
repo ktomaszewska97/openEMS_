@@ -73,11 +73,29 @@ public class SmartSolarBoxImpl extends AbstractOpenemsComponent implements Smart
 			e1.printStackTrace();
 		}
 
-		if (this.getSwitchStatusChannel().value().get() != previous_state) {
+//		if (this.getSwitchStatusChannel().value().get() != previous_state) {
+//			try {
+//				this.sendOn();
+//				// previous_state = getIsTriggeredChannel().value().get();
+//				// this.resetChargingPlan();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+
+		if (this.getSwitchStatusChannel().value().get() == true) {
 			try {
-				this.sendPost();
-				// previous_state = getIsTriggeredChannel().value().get();
-				// this.resetChargingPlan();
+				this.sendOn();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (this.getSwitchStatusChannel().value().get() == false) {
+			try {
+				this.sendOff();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,7 +104,7 @@ public class SmartSolarBoxImpl extends AbstractOpenemsComponent implements Smart
 	}
 
 	private void sendGet() throws IOException {
-		URL obj = new URL(this.config.ssbUrl());
+		URL obj = new URL(this.config.apiUrl());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
@@ -123,8 +141,8 @@ public class SmartSolarBoxImpl extends AbstractOpenemsComponent implements Smart
 		}
 	}
 
-	private void sendPost() throws IOException {
-		URL obj = new URL(this.config.ssbUrl());
+	private void sendOn() throws IOException {
+		URL obj = new URL(this.config.onUrl());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
 		con.setDoOutput(true);
@@ -133,23 +151,54 @@ public class SmartSolarBoxImpl extends AbstractOpenemsComponent implements Smart
 		System.out.println("POST Response Code :  " + responseCode);
 		System.out.println("POST Response Message : " + con.getResponseMessage());
 
-		if (responseCode == HttpURLConnection.HTTP_CREATED) { // success
-			System.out.println("POST IS SENT.");
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			System.out.println("On command sent.");
 		} else {
-			System.out.println("POST NOT WORKED");
+			System.out.println("POST NOT WORKED in ON");
 		}
+		
+		con.disconnect();
+		//Czy powinno być disconnect? Dlaczego response code nie zmienia wartości???
+
+	}
+
+	private void sendOff() throws IOException {
+		URL obj = new URL(this.config.offUrl());
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		con.setRequestMethod("POST");
+		con.setDoOutput(true);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("POST Response Code :  " + responseCode);
+		System.out.println("POST Response Message : " + con.getResponseMessage());
+
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			System.out.println("Off command sent.");
+		} else {
+			System.out.println("POST NOT WORKED in OFF");
+		}
+		
+		con.disconnect();
+
 
 	}
 
 	public void receiveChannelValues(String channelValues) {
 
 		this.resetValues();
+		
 		if (JsonParser.parseString(channelValues.toString()).isJsonObject()) {
 			JsonObject jo = JsonParser.parseString(channelValues.toString()).getAsJsonObject();
-			if (jo.get("switch_status") != null) {
-				this._setSwitchStatus(jo.get("switch_status").getAsBoolean());
+			System.out.println("\n");
+			System.out.println(jo);
+			System.out.println("\n");
+			if (jo.get("switchStatus") != null) {
+				this._setSwitchStatus(jo.get("switchStatus").getAsBoolean());
 			}
 		}
+		System.out.println("\n");
+		System.out.println("Receive Channel Values " + this.getSwitchStatusChannel().value());
+		System.out.println("\n");
 	}
 
 	private void resetValues() {

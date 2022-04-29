@@ -30,7 +30,7 @@ public interface SmartSolarBox extends OpenemsComponent {
 				.persistencePriority(PersistencePriority.HIGH)),
 		SOLAR_VOLTS(Doc.of(OpenemsType.DOUBLE).unit(Unit.VOLT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		SOLAR_POWER(Doc.of(OpenemsType.DOUBLE).unit(Unit.WATT_HOURS).accessMode(AccessMode.READ_WRITE)
+		SOLAR_POWER(Doc.of(OpenemsType.DOUBLE).unit(Unit.WATT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
 		BATTERY_AMPS(Doc.of(OpenemsType.DOUBLE).unit(Unit.AMPERE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
@@ -46,7 +46,7 @@ public interface SmartSolarBox extends OpenemsComponent {
 				.persistencePriority(PersistencePriority.HIGH)),
 		LOAD_VOLTS(Doc.of(OpenemsType.DOUBLE).unit(Unit.VOLT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		LOAD_POWER(Doc.of(OpenemsType.DOUBLE).unit(Unit.WATT_HOURS).accessMode(AccessMode.READ_WRITE)
+		LOAD_POWER(Doc.of(OpenemsType.DOUBLE).unit(Unit.WATT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
 		GEN_TOTAL(Doc.of(OpenemsType.DOUBLE).unit(Unit.KILOWATT_HOURS).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),

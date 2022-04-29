@@ -8,39 +8,15 @@
                 style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
                 <ion-list>
                     <ion-item>
-                        <ion-label>Solar Amps: {{ currentData[component.id + '/SolarAmps'] | unitvalue:'A'}}
+                        <ion-label>Solar: {{ currentData[component.id + '/SolarAmps'] | unitvalue:'A'}} | {{ currentData[component.id + '/SolarVolts'] | unitvalue:'V'}} | {{ currentData[component.id + '/SolarPower'] | unitvalue:'W'}}
                         </ion-label>
                     </ion-item>
                     <ion-item>
-                        <ion-label>Solar Volts: {{ currentData[component.id + '/SolarVolts'] | unitvalue:'V'}}
+                        <ion-label>Battery: {{ currentData[component.id + '/BatteryAmps'] | unitvalue:'A'}} | {{ currentData[component.id + '/BatteryVolts'] | unitvalue:'V'}} | {{ currentData[component.id + '/BatterySoc'] | unitvalue:'%'}}
                         </ion-label>
                     </ion-item>
                     <ion-item>
-                        <ion-label>Solar Power: {{ currentData[component.id + '/SolarPower'] | unitvalue:'Wh'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Battery Amps: {{ currentData[component.id + '/BatteryAmps'] | unitvalue:'A'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Battery Volts: {{ currentData[component.id + '/BatteryVolts'] | unitvalue:'V'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Battery SoC: {{ currentData[component.id + '/BatterySoc'] | unitvalue:'%'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Load Amps: {{ currentData[component.id + '/LoadAmps'] | unitvalue:'A'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Load Volts: {{ currentData[component.id + '/LoadVolts'] | unitvalue:'V'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Load Power: {{ currentData[component.id + '/LoadPower'] | unitvalue:'Wh'}}
+                        <ion-label>Load: {{ currentData[component.id + '/LoadAmps'] | unitvalue:'A'}} | {{ currentData[component.id + '/LoadVolts'] | unitvalue:'V'}} | {{ currentData[component.id + '/LoadPower'] | unitvalue:'W'}}
                         </ion-label>
                     </ion-item>
                     <ion-item>
@@ -54,6 +30,14 @@
                     <ion-item>
                         <ion-label>Box Temperature: {{ currentData[component.id + '/BoxTemperature'] | unitvalue:'C'}}
                         </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Switch Status: {{ currentData[component.id + '/SwitchStatus']}}
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Turn ON/OFF</ion-label>
+                        <ion-toggle (ionChange)="hitButton($event)"></ion-toggle>
                     </ion-item>
                 </ion-list>
 
