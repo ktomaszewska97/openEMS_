@@ -1,3 +1,0 @@
-= io.openems.controller.newdevicecontroller
-
-https://github.com/OpenEMS/openems/tree/develop/io.openems.controller.newdevicecontroller[Source Code icon:github[]]
