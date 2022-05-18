@@ -1,9 +1,9 @@
-Fri Apr 29 13:00:14 CEST 2022
-java.net.ConnectException: Connection refused: connect
+Thu May 12 17:07:14 CEST 2022
+java.net.ConnectException: Connection timed out: connect
 	at java.base/java.net.PlainSocketImpl.connect0(Native Method)
 	at java.base/java.net.PlainSocketImpl.socketConnect(PlainSocketImpl.java:101)
 	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:412)
-	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:253)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:255)
 	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:237)
 	at java.base/java.net.Socket.connect(Socket.java:609)
 	at java.base/java.net.Socket.connect(Socket.java:558)
@@ -20,7 +20,7 @@ java.net.ConnectException: Connection refused: connect
 	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1592)
 	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1520)
 	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:527)
-	at io.openems.edge.controller.newdevicecontroller.NewDeviceControllerImpl.sendGet(NewDeviceControllerImpl.java:98)
-	at io.openems.edge.controller.newdevicecontroller.NewDeviceControllerImpl.run(NewDeviceControllerImpl.java:67)
+	at io.openems.edge.smartsolarbox.SmartSolarBoxImpl.sendGet(SmartSolarBoxImpl.java:97)
+	at io.openems.edge.smartsolarbox.SmartSolarBoxImpl.run(SmartSolarBoxImpl.java:59)
 	at io.openems.edge.core.cycle.CycleWorker.forever(CycleWorker.java:118)
 	at io.openems.common.worker.AbstractWorker$1.run(AbstractWorker.java:113)
