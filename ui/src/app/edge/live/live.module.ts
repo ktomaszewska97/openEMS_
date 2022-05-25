@@ -52,6 +52,7 @@ import { ProductionModalComponent } from './production/modal/modal.component';
 import { ProductionComponent } from './production/production.component';
 import { NewDevice } from './newdevice/newdevice.component';
 import { SmartSolarBox } from './smartsolarbox/smartsolarbox.component';
+import { SonnenBattery } from './sonnenbattery/sonnenbattery.componen';
 
 @NgModule({
   imports: [
@@ -136,8 +137,8 @@ import { SmartSolarBox } from './smartsolarbox/smartsolarbox.component';
     ProductionModalComponent,
     StorageComponent,
     StorageModalComponent,
-    NewDevice,
-    SmartSolarBox
-  ]
+    SmartSolarBox,
+    SonnenBattery,
+  ],
 })
-export class LiveModule { }
+export class LiveModule {}

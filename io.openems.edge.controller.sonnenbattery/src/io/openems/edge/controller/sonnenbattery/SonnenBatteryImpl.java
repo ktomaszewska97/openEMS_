@@ -25,7 +25,7 @@ import io.openems.edge.controller.api.Controller;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(//
-		name = "Controller.io.openems.edge.controller.sonnenbattery", //
+		name = "Controller.SonnenBattery", //
 		immediate = true, //
 		configurationPolicy = ConfigurationPolicy.REQUIRE //
 )
@@ -43,9 +43,11 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 	}
 
 	@Activate
-	void activate(ComponentContext context, Config config) {
+	void activate(ComponentContext context, Config config) throws IOException {
 		super.activate(context, config.id(), config.alias(), config.enabled());
 		this.config = config;
+		this._setChargeStatus(0);
+		this.getOperatingMode();
 	}
 
 	@Deactivate
@@ -69,9 +71,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		//Toggle - change the mode, and charge or discharge
-		
+
 		if (this.getModeStatus().value().get() == 1) {
 			try {
 				this.sendChangeModeManual();
@@ -80,7 +80,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (this.getModeStatus().value().get() == 2) {
 			try {
 				this.sendChangeModeAutomatic();
@@ -89,8 +89,9 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				e.printStackTrace();
 			}
 		}
-		
-		if (this.getModeStatus().value().get() == 1) {
+
+		// Get charge status - at the beginning neutral
+		if (this.getChargeStatus().value().get() == 1) {
 			try {
 				this.sendChargeRequest();
 			} catch (IOException e) {
@@ -98,8 +99,8 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				e.printStackTrace();
 			}
 		}
-		
-		if (this.getModeStatus().value().get() == 2) {
+
+		if (this.getChargeStatus().value().get() == 2) {
 			try {
 				this.sendDischargeRequest();
 			} catch (IOException e) {
@@ -133,24 +134,27 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				this._setConsumptionW(jo.get("Consumption_W").getAsDouble());
 				this._setProductionW(jo.get("Production_W").getAsDouble());
 				this._setPacTotalW(jo.get("Pac_total_W").getAsDouble());
+				// this._setGridFeedInW(jo.get("GridFeedIn_W").getAsDouble());
 				this._setRsoc(jo.get("RSOC").getAsDouble());
 				this._setUsoc(jo.get("USOC").getAsDouble());
 				this._setFac(jo.get("Fac").getAsDouble());
 				this._setUac(jo.get("Uac").getAsDouble());
 				this._setUbat(jo.get("Ubat").getAsDouble());
-				this._setTimestamp(jo.get("Timestamp").getAsDouble());
+				this._setTimestamp(jo.get("Timestamp").getAsString());
 				this._setIsSystemInstalled(jo.get("IsSystemInstalled").getAsDouble());
-				
+
 			} else {
 				System.out.println("Not JsonObject");
 				System.out.println("JsonArray:" + JsonParser.parseString(response.toString()).isJsonArray());
 			}
 		}
 	}
-	
+
 	private void sendChargeRequest() throws IOException {
-		// This URL should be with a parameter
-		URL obj = new URL(this.config.chargeRequestUrl());
+		String urlBase = "http://localhost:3000/api/v1/setpoint/charge/";
+		String chargeValue = this.getChargeValue().toString();
+		String url = urlBase + chargeValue;
+		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
@@ -165,9 +169,13 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			System.out.println("GET NOT WORKED in CHARGE");
 		}
 	}
-	
-	private void sendDischargeRequest() throws IOException {		
-		URL obj = new URL(this.config.dischargeRequestUrl());
+
+	private void sendDischargeRequest() throws IOException {
+		String urlBase = "http://localhost:3000/api/v1/setpoint/discharge/";
+		String dischargeValue = this.getChargeValue().toString();
+		String url = urlBase + dischargeValue;
+		URL obj = new URL(url);
+		
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
@@ -182,67 +190,100 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			System.out.println("GET NOT WORKED in DISCHARGE");
 		}
 	}
-	
+
 	private void sendChangeModeAutomatic() throws IOException {
 		URL obj = new URL(this.config.apiChangeAutomaticMode());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("POST");
-		con.setDoOutput(true);
+		con.setRequestMethod("GET");
+		con.setRequestProperty("User-Agent", USER_AGENT);
 
 		int responseCode = con.getResponseCode();
-		System.out.println("POST Response Code :  " + responseCode);
-		System.out.println("POST Response Message : " + con.getResponseMessage());
+		System.out.println("GET Response Code :  " + responseCode);
+		System.out.println("GET Response Message : " + con.getResponseMessage());
 
 		if (responseCode == HttpURLConnection.HTTP_OK) { // success
 			System.out.println("On command sent.");
 		} else {
-			System.out.println("POST NOT WORKED in CHANGE AUTO MODE");
+			System.out.println("GET NOT WORKED in CHANGE AUTO MODE");
 		}
-		
-		con.disconnect();
 
 	}
-	
+
 	private void sendChangeModeManual() throws IOException {
 		URL obj = new URL(this.config.apiChangeManualMode());
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("POST");
-		con.setDoOutput(true);
+		con.setRequestMethod("GET");
+		con.setRequestProperty("User-Agent", USER_AGENT);
 
 		int responseCode = con.getResponseCode();
-		System.out.println("POST Response Code :  " + responseCode);
-		System.out.println("POST Response Message : " + con.getResponseMessage());
+		System.out.println("GET Response Code :  " + responseCode);
+		System.out.println("GET Response Message : " + con.getResponseMessage());
 
 		if (responseCode == HttpURLConnection.HTTP_OK) { // success
 			System.out.println("On command sent.");
 		} else {
 			System.out.println("POST NOT WORKED in CHANGE MANUAL MODE");
 		}
-		
-		con.disconnect();
 
 	}
 
 	public void receiveChannelValues(String channelValues) {
-		
+
 		if (JsonParser.parseString(channelValues.toString()).isJsonObject()) {
 			JsonObject jo = JsonParser.parseString(channelValues.toString()).getAsJsonObject();
-			
+
 			System.out.println("\n");
 			System.out.println(jo);
 			System.out.println("\n");
-			
+
 			if (jo.get("modeStatus") != null) {
 				this._setModeStatus(jo.get("modeStatus").getAsInt());
 			}
-			
+
 			if (jo.get("chargeStatus") != null) {
 				this._setChargeStatus(jo.get("chargeStatus").getAsInt());
 			}
+			
+			if (jo.get("chargeValue") != null) {
+				this._setChargeValue(jo.get("chargeValue").getAsInt());
+			}
+			
 		}
 		System.out.println("\n");
 		System.out.println("Receive Channel Values " + this.getChannelValues().value());
 		System.out.println("\n");
+	}
+
+	private void getOperatingMode() throws IOException {
+		URL obj = new URL(this.config.apiGetOperatingMode());
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("GET Response Code :  " + responseCode);
+		System.out.println("GET Response Message : " + con.getResponseMessage());
+
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+
+			in.close();
+
+			if (JsonParser.parseString(response.toString()).isJsonObject()) {
+				JsonObject jo = JsonParser.parseString(response.toString()).getAsJsonObject();
+				this._setModeStatus(jo.get("OperatingMode").getAsInt());
+			} else {
+				System.out.println("Not JsonObject");
+				System.out.println("JsonArray:" + JsonParser.parseString(response.toString()).isJsonArray());
+			}
+		}
+
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 				.persistencePriority(PersistencePriority.HIGH)),
 		UBAT(Doc.of(OpenemsType.DOUBLE).unit(Unit.VOLT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		TIMESTAMP(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
+		TIMESTAMP(Doc.of(OpenemsType.STRING).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
 		ISSYSTEMINSTALLED(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
@@ -58,10 +58,11 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 		//1 - manual, 2 - automatic
 		MODE_STATUS(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		// 1 - charge, 2 - discharge
+		// 1 - charge +1000, 2 - discharge -1000
 		CHARGE_STATUS(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
+				.persistencePriority(PersistencePriority.HIGH)),
+		CHARGE_VALUE(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),;
-
 		
 
 		private final Doc doc;
@@ -96,7 +97,7 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 		return this.channel(ChannelId.GRIDFEEDIN_W);
 	}
 
-	public default void _setGreedFeedInW(double value) {
+	public default void _setGridFeedInW(double value) {
 		this.getGridFeedInW().setNextValue(value);
 	}
 
@@ -148,11 +149,11 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 		this.getUbat().setNextValue(value);
 	}
 
-	public default DoubleWriteChannel getTimestamp() {
+	public default StringWriteChannel getTimestamp() {
 		return this.channel(ChannelId.TIMESTAMP);
 	}
 
-	public default void _setTimestamp(double value) {
+	public default void _setTimestamp(String value) {
 		this.getTimestamp().setNextValue(value);
 	}
 
@@ -164,11 +165,11 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 		this.getIsSystemInstalled().setNextValue(value);
 	}
 	
-	public default DoubleWriteChannel getChannelValues() {
+	public default StringWriteChannel getChannelValues() {
 		return this.channel(ChannelId.CHANNEL_VALUES);
 	}
 
-	public default void _setChannelValues(double value) {
+	public default void _setChannelValues(String value) {
 		this.getChannelValues().setNextValue(value);
 	}
 	
@@ -186,6 +187,14 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 
 	public default void _setChargeStatus(double value) {
 		this.getChargeStatus().setNextValue(value);
+	}
+	
+	public default DoubleWriteChannel getChargeValue() {
+		return this.channel(ChannelId.CHARGE_STATUS);
+	}
+
+	public default void _setChargeValue(double value) {
+		this.getChargeValue().setNextValue(value);
 	}
 
 	public Config getConfig();

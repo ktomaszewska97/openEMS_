@@ -144,6 +144,10 @@
                 <smartsolarbox [componentId]="widget.componentId"></smartsolarbox>
               </ion-col>
 
+              <ion-col *ngSwitchCase="'Controller.SonnenBattery'" size="12" size-lg="6" class="ion-no-padding">
+                <sonnenbattery [componentId]="widget.componentId"></sonnenbattery>
+              </ion-col>
+
             </ng-container>
 
             <!-- <ion-col size="12" size-lg="12">

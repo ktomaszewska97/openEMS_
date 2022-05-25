@@ -21,6 +21,7 @@ import { SharedModule } from './shared/shared.module';
 import { StatusSingleComponent } from './shared/status/single/status.component';
 import { Language } from './shared/translate/language';
 import { UserModule } from './user/user.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -30,10 +31,7 @@ import { UserModule } from './user/user.module';
     StatusSingleComponent,
     SystemLogComponent,
   ],
-  entryComponents: [
-    ChartOptionsPopoverComponent,
-    PickDatePopoverComponent,
-  ],
+  entryComponents: [ChartOptionsPopoverComponent, PickDatePopoverComponent],
   imports: [
     AngularMyDatePickerModule,
     AppRoutingModule,
@@ -44,17 +42,18 @@ import { UserModule } from './user/user.module';
     IndexModule,
     IonicModule.forRoot(),
     SharedModule,
+    FormsModule,
     TranslateModule.forRoot({
-      loader: { provide: TranslateLoader, useClass: Language }
+      loader: { provide: TranslateLoader, useClass: Language },
     }),
     UserModule,
-    RegistrationModule
+    RegistrationModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CookieService,
     // { provide: ErrorHandler, useExisting: Service },
-    { provide: LOCALE_ID, useValue: 'de' }
+    { provide: LOCALE_ID, useValue: 'de' },
   ],
   bootstrap: [AppComponent],
 })
