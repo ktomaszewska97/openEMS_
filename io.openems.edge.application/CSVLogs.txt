@@ -1,0 +1,2 @@
+"timestamp","production","consumption","SOC"
+"Channel [ID=Timestamp, type=STRING, activeValue=UNDEFINED, access=READ_WRITE]","Channel [ID=ConsumptionW, type=DOUBLE, activeValue=UNDEFINED, access=READ_WRITE]","Channel [ID=ProductionW, type=DOUBLE, activeValue=UNDEFINED, access=READ_WRITE]","Channel [ID=Usoc, type=DOUBLE, activeValue=UNDEFINED, access=READ_WRITE]"

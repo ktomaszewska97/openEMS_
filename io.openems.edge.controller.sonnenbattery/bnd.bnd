@@ -7,7 +7,9 @@ Bundle-Version: 1.0.0.${tstamp}
 	${buildpath},\
 	io.openems.common,\
 	io.openems.edge.common,\
-	io.openems.edge.controller.api
+	io.openems.edge.controller.api,\
+	com.opencsv,\
+	io.netty.common
 
 -testpath: \
 	${testpath}

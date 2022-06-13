@@ -25,25 +25,10 @@
                         </ion-label>
                     </ion-item>
                     <ion-item>
-                        <ion-label>RSOC: {{ currentData[component.id + '/Rsoc'] | unitvalue:'%'}} | USOC: {{ currentData[component.id + '/Usoc'] | unitvalue:'%'}}
+                        <ion-label>USOC: {{ currentData[component.id + '/Usoc'] | unitvalue:'%'}}
                         </ion-label>
                     </ion-item>
-                    <ion-item>
-                        <ion-label>Fac: {{ currentData[component.id + '/Fac'] | unitvalue:'Hz'}} | Uac: {{ currentData[component.id + '/Uac'] | unitvalue:'V'}} | Ubat: {{ currentData[component.id + '/Ubat'] | unitvalue:'V'}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Timestamp: {{ currentData[component.id + '/Timestamp']}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>IsSystemInstalled: {{ currentData[component.id + '/Issysteminstalled']}}
-                        </ion-label>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Mode Status: {{ currentData[component.id + '/ModeStatus']}}
-                        </ion-label>
-                    </ion-item>
+                    
                     <ion-item>
                         <ion-label>Charge Status: {{ currentData[component.id + '/ChargeStatus']}}
                         </ion-label>
@@ -53,15 +38,12 @@
                         <ion-label>Switch Mode Manual/Automatic</ion-label>
                         <ion-toggle (ionChange)="hitModeButton($event)"></ion-toggle>
                     </ion-item>
-                    
-                    <ion-item>
-                        <ion-label>Charge/Discharge</ion-label>
-                        <ion-toggle (ionChange)="hitChargeStatusButton($event)"></ion-toggle>
-                    </ion-item>
 
                     <ion-item>
                         <ion-label>Charge/Discharge</ion-label>
                         <ion-input type="text" id="chargeValue" name="chargeValue" [(ngModel)]="chargeValue"></ion-input>
+                    </ion-item>
+                    <ion-item>
                         <ion-button type="button" (click)="charge()">Charge</ion-button>
                         <ion-button type="button" (click)="discharge()">Discharge</ion-button>
                     </ion-item>

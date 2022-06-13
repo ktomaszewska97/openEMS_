@@ -5,8 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -33,6 +34,8 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 
 	private Config config = null;
 	private static final String USER_AGENT = "Mozilla/5.0";
+	CSVLogger csvLogger = new CSVLogger();
+	int counter = 0;
 
 	public SonnenBatteryImpl() {
 		super(//
@@ -47,7 +50,19 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 		super.activate(context, config.id(), config.alias(), config.enabled());
 		this.config = config;
 		this._setChargeStatus(0);
-		this.getOperatingMode();
+
+		try {
+			this.getOperatingMode();
+		} catch (IOException e) {
+			System.out.println("Cannot get operating mode.");
+		}
+
+		try {
+			csvLogger.initializeFileWriter();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
 	}
 
 	@Deactivate
@@ -57,56 +72,92 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 
 	@Override
 	public void run() throws OpenemsNamedException {
-		try {
-			this.sendGet();
-		} catch (IOException e1) {
-			Logger logger = new Logger();
-			System.out.println("Get not sent properly.");
-			try {
-				logger.logError(e1);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
-		if (this.getModeStatus().value().get() == 1) {
-			try {
-				this.sendChangeModeManual();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		while (true) {
 
-		if (this.getModeStatus().value().get() == 2) {
 			try {
-				this.sendChangeModeAutomatic();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				this.sendGet();
+			} catch (IOException e1) {
+				Logger logger = new Logger();
+				System.out.println("Get not sent properly.");
+				try {
+					logger.logError(e1);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				e1.printStackTrace();
 			}
-		}
 
-		// Get charge status - at the beginning neutral
-		if (this.getChargeStatus().value().get() == 1) {
-			try {
-				this.sendChargeRequest();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+			// CSV Logger
 
-		if (this.getChargeStatus().value().get() == 2) {
-			try {
-				this.sendDischargeRequest();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (counter == 1) {
+				String[] newData = csvLogger.createCsvData(getTimestamp().value().get().toString(),
+						getConsumptionW().value().get().toString(),
+						getProductionW().value().get().toString(), getUsoc().value().get().toString());
+				try {
+					csvLogger.writeData(newData);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				counter = 0;
 			}
+
+			try {
+				if (this.getModeStatus().value().get() == 1) {
+					try {
+						this.sendChangeModeManual();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			} catch (NullPointerException e) {
+				System.out.println("Cannot get mode status.");
+			}
+
+			try {
+				if (this.getModeStatus().value().get() == 2) {
+					try {
+						this.sendChangeModeAutomatic();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} catch (NullPointerException e) {
+				System.out.println("Cannot get mode status.");
+			}
+
+			// Get charge status - at the beginning neutral
+			try {
+				if (this.getChargeStatus().value().get() == 1) {
+					try {
+						this.sendChargeRequest();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} catch (NullPointerException e) {
+				System.out.println("Cannot get charge status.");
+			}
+
+			try {
+				if (this.getChargeStatus().value().get() == 2) {
+					try {
+						this.sendDischargeRequest();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} catch (NullPointerException e) {
+				System.out.println("Cannot get charge status.");
+			}
+			counter++;
+			System.out.println("COUNTER "+counter);
 		}
 
 	}
@@ -175,7 +226,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 		String dischargeValue = this.getChargeValue().toString();
 		String url = urlBase + dischargeValue;
 		URL obj = new URL(url);
-		
+
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
@@ -243,11 +294,11 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			if (jo.get("chargeStatus") != null) {
 				this._setChargeStatus(jo.get("chargeStatus").getAsInt());
 			}
-			
+
 			if (jo.get("chargeValue") != null) {
 				this._setChargeValue(jo.get("chargeValue").getAsInt());
 			}
-			
+
 		}
 		System.out.println("\n");
 		System.out.println("Receive Channel Values " + this.getChannelValues().value());

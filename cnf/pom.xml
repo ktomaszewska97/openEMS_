@@ -293,5 +293,10 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.36</version>
 		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.3</version>
+		</dependency>
 	</dependencies>
 </project>
