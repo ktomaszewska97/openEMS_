@@ -90,10 +90,15 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 
 			// CSV Logger
 
-			if (counter == 1) {
-				String[] newData = csvLogger.createCsvData(getTimestamp().value().get().toString(),
-						getConsumptionW().value().get().toString(),
-						getProductionW().value().get().toString(), getUsoc().value().get().toString());
+			if (counter == 60) {
+				String[] newData = null;
+				try {
+				newData = csvLogger.createCsvData(getTimestamp().value().get().toString(),
+						getConsumptionWChannel().value().get().toString(), getProductionW().value().get().toString(),
+						getUsoc().value().get().toString());
+				} catch (NullPointerException e) {
+					System.out.println("Cannot get mode status.");
+				}
 				try {
 					csvLogger.writeData(newData);
 				} catch (IOException e1) {
@@ -157,7 +162,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				System.out.println("Cannot get charge status.");
 			}
 			counter++;
-			System.out.println("COUNTER "+counter);
+			System.out.println("COUNTER " + counter);
 		}
 
 	}
@@ -181,7 +186,9 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			in.close();
 
 			if (JsonParser.parseString(response.toString()).isJsonObject()) {
+				
 				JsonObject jo = JsonParser.parseString(response.toString()).getAsJsonObject();
+				System.out.println("PRINTING JSON OBJECT " + jo);
 				this._setConsumptionW(jo.get("Consumption_W").getAsDouble());
 				this._setProductionW(jo.get("Production_W").getAsDouble());
 				this._setPacTotalW(jo.get("Pac_total_W").getAsDouble());
@@ -193,6 +200,9 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				this._setUbat(jo.get("Ubat").getAsDouble());
 				this._setTimestamp(jo.get("Timestamp").getAsString());
 				this._setIsSystemInstalled(jo.get("IsSystemInstalled").getAsDouble());
+				
+				System.out.println("PRINTING OBJECT CONSUMPTION W (GET) " + jo.get("Consumption_W").getAsDouble());
+				System.out.println("PRINTING OBJECT CONSUMPTION W (SET) " + this.getConsumptionWChannel().value());
 
 			} else {
 				System.out.println("Not JsonObject");

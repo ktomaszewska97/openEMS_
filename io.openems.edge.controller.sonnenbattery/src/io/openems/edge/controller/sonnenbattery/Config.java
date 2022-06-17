@@ -18,7 +18,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 	boolean enabled() default true;
 	
 	@AttributeDefinition(name = "GET Status parameters", description = "The GET URL of the API")
-	String apiUrl() default "http://192.168.21.203/api/v1/status";
+	String apiUrl() default "http://localhost:3000/api/v2/status";
 	
 	@AttributeDefinition(name = "GET Charge request", description = "The GET URL of the API")
 	String chargeRequestUrl() default "http://192.168.21.203/api/v1/setpoint/charge/100";

@@ -14,7 +14,7 @@ import io.openems.edge.controller.api.Controller;
 public interface SonnenBattery extends Controller, OpenemsComponent {
 
 	public enum ChannelId implements io.openems.edge.common.channel.ChannelId {
-		CONSUMPTION_W(Doc.of(OpenemsType.DOUBLE).unit(Unit.WATT).accessMode(AccessMode.READ_WRITE)
+		CONSUMPTION_W(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
 		PRODUCTION_W(Doc.of(OpenemsType.DOUBLE).unit(Unit.WATT).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
@@ -77,12 +77,16 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 		}
 	}
 
-	public default DoubleWriteChannel getConsumptionW() {
+	public default DoubleWriteChannel getConsumptionWChannel() {
 		return this.channel(ChannelId.CONSUMPTION_W);
 	}
 
 	public default void _setConsumptionW(double value) {
-		this.getConsumptionW().setNextValue(value);
+		this.getConsumptionWChannel().setNextValue(value);
+	
+		System.out.println("Value from _setConsumptionW " + value);
+		System.out.println("Value from getConsumptionW " + this.getConsumptionWChannel().value().get());
+		
 	}
 
 	public default DoubleWriteChannel getProductionW() {
@@ -190,7 +194,7 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 	}
 	
 	public default DoubleWriteChannel getChargeValue() {
-		return this.channel(ChannelId.CHARGE_STATUS);
+		return this.channel(ChannelId.CHARGE_VALUE);
 	}
 
 	public default void _setChargeValue(double value) {
