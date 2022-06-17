@@ -57,12 +57,6 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			System.out.println("Cannot get operating mode.");
 		}
 
-		try {
-			csvLogger.initializeFileWriter();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
 	}
 
 	@Deactivate
@@ -86,26 +80,6 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 					e.printStackTrace();
 				}
 				e1.printStackTrace();
-			}
-
-			// CSV Logger
-
-			if (counter == 60) {
-				String[] newData = null;
-				try {
-				newData = csvLogger.createCsvData(getTimestamp().value().get().toString(),
-						getConsumptionWChannel().value().get().toString(), getProductionW().value().get().toString(),
-						getUsoc().value().get().toString());
-				} catch (NullPointerException e) {
-					System.out.println("Cannot get mode status.");
-				}
-				try {
-					csvLogger.writeData(newData);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				counter = 0;
 			}
 
 			try {
@@ -161,8 +135,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			} catch (NullPointerException e) {
 				System.out.println("Cannot get charge status.");
 			}
-			counter++;
-			System.out.println("COUNTER " + counter);
+
 		}
 
 	}
@@ -186,7 +159,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 			in.close();
 
 			if (JsonParser.parseString(response.toString()).isJsonObject()) {
-				
+
 				JsonObject jo = JsonParser.parseString(response.toString()).getAsJsonObject();
 				System.out.println("PRINTING JSON OBJECT " + jo);
 				this._setConsumptionW(jo.get("Consumption_W").getAsDouble());
@@ -200,7 +173,7 @@ public class SonnenBatteryImpl extends AbstractOpenemsComponent implements Sonne
 				this._setUbat(jo.get("Ubat").getAsDouble());
 				this._setTimestamp(jo.get("Timestamp").getAsString());
 				this._setIsSystemInstalled(jo.get("IsSystemInstalled").getAsDouble());
-				
+
 				System.out.println("PRINTING OBJECT CONSUMPTION W (GET) " + jo.get("Consumption_W").getAsDouble());
 				System.out.println("PRINTING OBJECT CONSUMPTION W (SET) " + this.getConsumptionWChannel().value());
 
