@@ -37,6 +37,7 @@ export enum WidgetFactory {
   'NewDevice',
   'Controller.SmartSolarBox',
   'Controller.SonnenBattery',
+  'LineChartComponent',
 }
 
 export type Icon = {

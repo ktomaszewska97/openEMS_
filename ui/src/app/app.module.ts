@@ -22,6 +22,7 @@ import { StatusSingleComponent } from './shared/status/single/status.component';
 import { Language } from './shared/translate/language';
 import { UserModule } from './user/user.module';
 import { FormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { FormsModule } from '@angular/forms';
     }),
     UserModule,
     RegistrationModule,
+    ChartsModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

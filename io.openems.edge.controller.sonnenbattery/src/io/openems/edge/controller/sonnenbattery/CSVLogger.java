@@ -1,8 +1,8 @@
 package io.openems.edge.controller.sonnenbattery;
-import com.opencsv.CSVWriter;
-
 import java.io.FileWriter;
 import java.io.IOException;
+
+import com.opencsv.CSVWriter;
 
 public class CSVLogger {
 	

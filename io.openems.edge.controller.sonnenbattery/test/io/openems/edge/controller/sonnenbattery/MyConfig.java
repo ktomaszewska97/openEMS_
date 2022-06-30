@@ -43,6 +43,42 @@ public class MyConfig extends AbstractComponentConfig implements Config {
 		this.builder = builder;
 	}
 
+	@Override
+	public String apiUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String chargeRequestUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String dischargeRequestUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String apiChangeAutomaticMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String apiChangeManualMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String apiGetOperatingMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	@Override
 //	public String setting0() {
 //		return this.builder.setting0;

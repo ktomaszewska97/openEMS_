@@ -6,6 +6,7 @@ import io.openems.common.channel.Unit;
 import io.openems.common.types.OpenemsType;
 import io.openems.edge.common.channel.Doc;
 import io.openems.edge.common.channel.DoubleWriteChannel;
+import io.openems.edge.common.channel.IntegerWriteChannel;
 import io.openems.edge.common.channel.StringDoc;
 import io.openems.edge.common.channel.StringWriteChannel;
 import io.openems.edge.common.component.OpenemsComponent;
@@ -56,12 +57,11 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 					});
 				})),
 		//1 - manual, 2 - automatic
-		MODE_STATUS(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
+		MODE_STATUS(Doc.of(OpenemsType.INTEGER).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		// 1 - charge +1000, 2 - discharge -1000
-		CHARGE_STATUS(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
+		CHARGE_STATUS(Doc.of(OpenemsType.INTEGER).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),
-		CHARGE_VALUE(Doc.of(OpenemsType.DOUBLE).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
+		CHARGE_VALUE(Doc.of(OpenemsType.INTEGER).unit(Unit.NONE).accessMode(AccessMode.READ_WRITE)
 				.persistencePriority(PersistencePriority.HIGH)),;
 		
 
@@ -83,10 +83,6 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 
 	public default void _setConsumptionW(double value) {
 		this.getConsumptionWChannel().setNextValue(value);
-	
-		System.out.println("Value from _setConsumptionW " + value);
-		System.out.println("Value from getConsumptionW " + this.getConsumptionWChannel().value().get());
-		
 	}
 
 	public default DoubleWriteChannel getProductionW() {
@@ -103,6 +99,7 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 
 	public default void _setGridFeedInW(double value) {
 		this.getGridFeedInW().setNextValue(value);
+		System.out.println("Executed Set Grid Feed In W ");
 	}
 
 	public default DoubleWriteChannel getPacTotalW() {
@@ -177,27 +174,27 @@ public interface SonnenBattery extends Controller, OpenemsComponent {
 		this.getChannelValues().setNextValue(value);
 	}
 	
-	public default DoubleWriteChannel getModeStatus() {
+	public default IntegerWriteChannel getModeStatus() {
 		return this.channel(ChannelId.MODE_STATUS);
 	}
 
-	public default void _setModeStatus(double value) {
+	public default void _setModeStatus(int value) {
 		this.getModeStatus().setNextValue(value);
 	}
 	
-	public default DoubleWriteChannel getChargeStatus() {
+	public default IntegerWriteChannel getChargeStatus() {
 		return this.channel(ChannelId.CHARGE_STATUS);
 	}
 
-	public default void _setChargeStatus(double value) {
+	public default void _setChargeStatus(int value) {
 		this.getChargeStatus().setNextValue(value);
 	}
 	
-	public default DoubleWriteChannel getChargeValue() {
+	public default IntegerWriteChannel getChargeValue() {
 		return this.channel(ChannelId.CHARGE_VALUE);
 	}
 
-	public default void _setChargeValue(double value) {
+	public default void _setChargeValue(int value) {
 		this.getChargeValue().setNextValue(value);
 	}
 

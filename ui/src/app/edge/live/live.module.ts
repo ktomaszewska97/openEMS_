@@ -53,6 +53,8 @@ import { ProductionComponent } from './production/production.component';
 import { NewDevice } from './newdevice/newdevice.component';
 import { SmartSolarBox } from './smartsolarbox/smartsolarbox.component';
 import { SonnenBattery } from './sonnenbattery/sonnenbattery.componen';
+import { ChartsModule } from 'ng2-charts';
+import { LineChartComponent } from './line-chart/line-chart.component';
 
 @NgModule({
   imports: [
@@ -63,6 +65,7 @@ import { SonnenBattery } from './sonnenbattery/sonnenbattery.componen';
     Controller_Ess_FixActivePower,
     EnergymonitorModule,
     SharedModule,
+    ChartsModule,
   ],
   entryComponents: [
     AdministrationComponent,
@@ -139,6 +142,7 @@ import { SonnenBattery } from './sonnenbattery/sonnenbattery.componen';
     StorageModalComponent,
     SmartSolarBox,
     SonnenBattery,
+    LineChartComponent,
   ],
 })
 export class LiveModule {}

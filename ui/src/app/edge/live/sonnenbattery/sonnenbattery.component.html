@@ -2,7 +2,10 @@
     <ng-container *ngIf="(edge.currentData | async)['channel'] as currentData">
         <ion-card>
             <ion-item lines="full" color="light">
-                <ion-label style="display: flex; justify-content: center;">SonnenBattery</ion-label>
+                <ion-label style="display: flex; justify-content: center;">Solar & Battery</ion-label>
+            </ion-item>
+            <ion-item>
+                <img src="assets/img/pv_instalation.png">
             </ion-item>
             <ion-card-content
                 style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
@@ -17,7 +20,7 @@
                     </ion-item>
                     <ion-item>
                         <ion-label>
-                            Greed Feed In: {{ currentData[component.id + '/GridfeedinW'] | unitvalue:'W'}}
+                            Grid Feed In: {{ currentData[component.id + '/GridfeedinW'] | unitvalue:'W'}}
                         </ion-label>
                     </ion-item>
                     <ion-item>

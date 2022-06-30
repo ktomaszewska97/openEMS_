@@ -44,6 +44,7 @@ export class SonnenBattery {
           [
             new ChannelAddress(this.componentId, 'ConsumptionW'),
             new ChannelAddress(this.componentId, 'ProductionW'),
+            new ChannelAddress(this.componentId, 'GridfeedinW'),
             new ChannelAddress(this.componentId, 'PacTotalW'),
             new ChannelAddress(this.componentId, 'Rsoc'),
             new ChannelAddress(this.componentId, 'Usoc'),
